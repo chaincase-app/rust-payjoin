@@ -26,13 +26,14 @@ pub mod v1;
 pub mod v2;
 
 type InternalResult<T> = Result<T, InternalProposalError>;
+type OutputAmountAndIndex = (bitcoin::Amount, usize);
 
 /// Data required to validate the response against the original PSBT.
 #[derive(Debug, Clone)]
 pub struct PsbtContext {
     original_psbt: Psbt,
     disable_output_substitution: bool,
-    fee_contribution: Option<(bitcoin::Amount, usize)>,
+    fee_contribution: Option<OutputAmountAndIndex>,
     min_fee_rate: FeeRate,
     payee: ScriptBuf,
     allow_mixed_input_scripts: bool,
@@ -341,7 +342,7 @@ fn find_change_index(
     payee: &Script,
     fee: bitcoin::Amount,
     clamp_fee_contribution: bool,
-) -> Result<Option<(bitcoin::Amount, usize)>, InternalBuildSenderError> {
+) -> Result<Option<OutputAmountAndIndex>, InternalBuildSenderError> {
     match (psbt.unsigned_tx.output.len(), clamp_fee_contribution) {
         (0, _) => return Err(InternalBuildSenderError::NoOutputs),
         (1, false) if psbt.unsigned_tx.output[0].script_pubkey == *payee =>
@@ -370,7 +371,7 @@ fn check_change_index(
     fee: bitcoin::Amount,
     index: usize,
     clamp_fee_contribution: bool,
-) -> Result<(bitcoin::Amount, usize), InternalBuildSenderError> {
+) -> Result<OutputAmountAndIndex, InternalBuildSenderError> {
     let output = psbt
         .unsigned_tx
         .output
@@ -387,7 +388,7 @@ fn determine_fee_contribution(
     payee: &Script,
     fee_contribution: Option<(bitcoin::Amount, Option<usize>)>,
     clamp_fee_contribution: bool,
-) -> Result<Option<(bitcoin::Amount, usize)>, InternalBuildSenderError> {
+) -> Result<Option<OutputAmountAndIndex>, InternalBuildSenderError> {
     Ok(match fee_contribution {
         Some((fee, None)) => find_change_index(psbt, payee, fee, clamp_fee_contribution)?,
         Some((fee, Some(index))) =>
@@ -399,7 +400,7 @@ fn determine_fee_contribution(
 fn serialize_url(
     endpoint: Url,
     disable_output_substitution: bool,
-    fee_contribution: Option<(bitcoin::Amount, usize)>,
+    fee_contribution: Option<OutputAmountAndIndex>,
     min_fee_rate: FeeRate,
     version: &str,
 ) -> Result<Url, url::ParseError> {
