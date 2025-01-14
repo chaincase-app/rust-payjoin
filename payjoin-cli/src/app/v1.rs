@@ -88,7 +88,7 @@ impl AppTrait for App {
             .send()
             .await
             .with_context(|| "HTTP request failed")?;
-        let response_str = response.text().await.with_context(|| "Failed to resad seponse")?;
+        let response_str = response.text().await.with_context(|| "Failed to read seponse")?;
 
         let fallback_tx = Psbt::from_str(&body)
             .map_err(|e| anyhow!("Failed to load PSBT from base64: {}", e))?
