@@ -375,7 +375,7 @@ impl App {
                     .map_err(|e| Error::Implementation(e.into()))?
             },
             Some(bitcoin::FeeRate::MIN),
-            self.config.max_fee_rate.unwrap_or(FeeRate::ZERO),
+            self.config.max_fee_rate.unwrap_or(FeeRate::BROADCAST_MIN),
         )?;
         Ok(payjoin_proposal)
     }
