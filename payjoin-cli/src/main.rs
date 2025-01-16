@@ -118,7 +118,8 @@ fn cli() -> ArgMatches {
         Arg::new("max_fee_rate")
             .long("max-fee-rate")
             .num_args(1)
-            .help("The maximum effective fee rate the receiver is willing to pay (in sat/vB)"),
+            .help("The maximum effective fee rate the receiver is willing to pay (in sat/vB)")
+            .value_parser(parse_feerate_in_sat_per_vb),
     );
     #[cfg(not(feature = "v2"))]
     {
