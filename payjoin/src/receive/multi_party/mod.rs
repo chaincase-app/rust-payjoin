@@ -1,7 +1,8 @@
 use bitcoin::{FeeRate, Psbt};
 use error::InternalMultiPartyError;
 
-use super::{v1, v2, Error, InputContributionError, InputPair, SelectionError};
+use super::error::InputContributionError;
+use super::{v1, v2, Error, InputPair, SelectionError};
 use crate::error::MultiPartyError;
 use crate::psbt::PsbtExt;
 use crate::receive::v2::SessionContext;
