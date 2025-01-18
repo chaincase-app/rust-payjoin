@@ -1,7 +1,8 @@
 use core::fmt;
 use std::error;
 
-use crate::{psbt, receive::v1::RequestError};
+use crate::psbt;
+use crate::receive::v1::RequestError;
 
 #[derive(Debug)]
 pub struct MultiPartyError(InternalMultiPartyError);

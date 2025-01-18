@@ -36,11 +36,7 @@ impl MultiPartyProposalBuilder {
             return Err(InternalMultiPartyError::ProposalVersionNotSupported(params.v).into());
         }
 
-        if let Some(opt_merge) = params.optimistic_merge {
-            if !opt_merge {
-                return Err(InternalMultiPartyError::OptimisticMergeNotSupported.into());
-            }
-        } else {
+        if !params.optimistic_merge {
             return Err(InternalMultiPartyError::OptimisticMergeNotSupported.into());
         }
         Ok(())

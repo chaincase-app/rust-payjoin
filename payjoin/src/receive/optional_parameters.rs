@@ -15,7 +15,7 @@ pub(crate) struct Params {
     /// minfeerate
     pub min_feerate: FeeRate,
     /// Opt in to optimistic psbt merge
-    pub optimistic_merge: Option<bool>,
+    pub optimistic_merge: bool,
 }
 
 impl Default for Params {
@@ -25,7 +25,7 @@ impl Default for Params {
             disable_output_substitution: false,
             additional_fee_contribution: None,
             min_feerate: FeeRate::ZERO,
-            optimistic_merge: None,
+            optimistic_merge: false,
         }
     }
 }
@@ -87,7 +87,7 @@ impl Params {
                     },
                 ("disableoutputsubstitution", v) =>
                     params.disable_output_substitution = v == "true",
-                ("optimisticmerge", v) => params.optimistic_merge = Some(v == "true"),
+                ("optimisticmerge", v) => params.optimistic_merge = v == "true",
                 _ => (),
             }
         }

@@ -169,7 +169,12 @@ mod integration {
         }
     }
 
-    #[cfg(all(feature = "io", feature = "v2", feature = "_danger-local-https", feature = "multi_party"))]
+    #[cfg(all(
+        feature = "io",
+        feature = "v2",
+        feature = "_danger-local-https",
+        feature = "multi_party"
+    ))]
     mod v2 {
         use core::panic;
         use std::sync::Arc;

@@ -176,6 +176,9 @@ impl Receiver {
         // see: https://github.com/bitcoin/bips/blob/master/bip-0078.mediawiki#unsecured-payjoin-server
         if params.v == 1 {
             params.disable_output_substitution = true;
+
+            // Additionally V1 sessions never have an optimistic merge opportunity
+            params.optimistic_merge = false;
         }
 
         log::debug!("Received request with params: {:?}", params);
