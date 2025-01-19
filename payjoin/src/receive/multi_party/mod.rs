@@ -168,7 +168,10 @@ impl MultiPartyPayjoinProposalWantsInputs {
         &self,
         candidate_inputs: impl IntoIterator<Item = InputPair>,
     ) -> Result<InputPair, SelectionError> {
-        self.v1.try_preserving_privacy(candidate_inputs)
+        // TODO(armins) classic v1 privacy preserving selection doenst allow for many outputs
+        // lets just pick the first one
+        Ok(candidate_inputs.into_iter().next().unwrap())
+        // self.v1.try_preserving_privacy(candidate_inputs)
     }
 
     /// Add the provided list of inputs to the transaction.
