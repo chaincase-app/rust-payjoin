@@ -207,6 +207,23 @@ impl<'a> SenderBuilder<'a> {
             min_fee_rate: self.min_fee_rate,
         })
     }
+
+    pub fn build_with_multiple_senders(&self) -> Result<Sender, BuildSenderError> {
+        let mut psbt = self.psbt.clone();
+        clear_unneeded_fields(&mut psbt);
+        // TODO(armins) this is pretty much skipping all the validating and checks
+        // TODO(armins) add fee contribution output. Right now this is hardcoded to None
+        // TODO(armins) this is where we check for optimistic merge being true and check for all the normal conditions
+        Ok(Sender {
+            psbt,
+            endpoint: self.uri.extras.endpoint.clone(),
+            disable_output_substitution: self.disable_output_substitution,
+            // TODO(armins) add fee contribution output. Right now this is hardcoded to None
+            fee_contribution: None,
+            min_fee_rate: self.min_fee_rate,
+            payee: self.uri.address.script_pubkey(),
+        })
+    }
 }
 
 #[derive(Clone, PartialEq, Eq)]
@@ -233,7 +250,8 @@ impl Sender {
             self.disable_output_substitution,
             self.fee_contribution,
             self.min_fee_rate,
-            "1", // payjoin version
+            "1",   // payjoin version
+            false, // Opt into optimistic multiparty payjoin
         )?;
         let body = self.psbt.to_string().as_bytes().to_vec();
         Ok((
@@ -246,6 +264,7 @@ impl Sender {
                     payee: self.payee.clone(),
                     min_fee_rate: self.min_fee_rate,
                     allow_mixed_input_scripts: false,
+                    allow_optimistic_merge: false, // optimistic merge always false for v1
                 },
             },
         ))

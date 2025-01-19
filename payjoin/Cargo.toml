@@ -23,6 +23,7 @@ v2 = ["bitcoin/rand", "bitcoin/serde", "hpke", "dep:http", "bhttp", "ohttp", "se
 #[doc = "Functions to fetch OHTTP keys via CONNECT proxy using reqwest. Enables `v2` since only `v2` uses OHTTP."]
 io = ["v2", "reqwest/rustls-tls"]
 _danger-local-https = ["reqwest/rustls-tls", "rustls"]
+multi_party = ["v2"]
 
 [dependencies]
 bitcoin = { version = "0.32.5", features = ["base64"] }
