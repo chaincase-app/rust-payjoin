@@ -29,7 +29,7 @@
         rustVersions = with pkgs.rust-bin;
           builtins.mapAttrs (_name: rust-bin:
             rust-bin.override {
-              extensions = ["rust-src" "rustfmt"];
+              extensions = ["rust-src" "rustfmt" "llvm-tools-preview"];
             })
           {
             msrv = stable.${msrv}.default;
@@ -99,6 +99,7 @@
               cargo-edit
               cargo-nextest
               cargo-watch
+              cargo-llvm-cov
               rust-analyzer
             ];
           })
