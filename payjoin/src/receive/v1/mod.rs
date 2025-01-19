@@ -841,10 +841,10 @@ impl ProvisionalProposal {
     pub fn finalize_proposal(
         mut self,
         wallet_process_psbt: impl Fn(&Psbt) -> Result<Psbt, Error>,
-        min_feerate_sat_per_vb: Option<FeeRate>,
-        max_feerate_sat_per_vb: FeeRate,
+        min_feerate: Option<FeeRate>,
+        max_effective_feerate: FeeRate,
     ) -> Result<PayjoinProposal, Error> {
-        let mut psbt = self.apply_fee(min_feerate_sat_per_vb, max_feerate_sat_per_vb)?.clone();
+        let mut psbt = self.apply_fee(min_feerate, max_effective_feerate)?.clone();
         // Remove now-invalid sender signatures before applying the receiver signatures
         for i in self.sender_input_indexes() {
             log::trace!("Clearing sender input {}", i);
